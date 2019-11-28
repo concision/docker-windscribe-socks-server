@@ -1,8 +1,11 @@
+### Image Configuration
 FROM ubuntu:latest
 
 # expose SOCKS server port
 EXPOSE 1080/tcp
 
+
+### Liniux Dependencies
 # install Windscribe and OpenSSH server
 RUN \
     # obtain caches
@@ -39,11 +42,16 @@ RUN \
 # disable SSH shell
 RUN chsh --shell /bin/false
 
+
+### Add Docker scripts
 # add entrypoint
-COPY docker-entrypoint.sh /
+COPY docker-entrypoint.sh docker-healthcheck.sh /
 
 # mark as executable
-RUN dos2unix /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
+RUN dos2unix /docker-*.sh && \
+    chmod +x /docker-*.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+HEALTHCHECK --interval=60s --timeout=30s --start-period=15s --retries=3 \
+            CMD "/docker-healthcheck.sh"
