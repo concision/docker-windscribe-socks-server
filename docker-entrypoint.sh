@@ -63,8 +63,6 @@ prefixWith() {
 
 
 	### Start Windscribe client
-	# Windscribe performs DNS lookups remotely using locally configured DNS nameservers; use Googles
-	echo "nameserver 8.8.8.8" > /etc/resolv.conf
 	# start windscribe daemon
 	prefixWith "[WINDSCRIBE]" echo "Starting Windscribe client"
 	prefixWith "[WINDSCRIBE]" windscribe start
@@ -74,6 +72,7 @@ prefixWith() {
 	${WINDSCRIBE_USERNAME}
 	${WINDSCRIBE_PASSWORD}
 	EOF
+	prefixWith "[WINDSCRIBE]" windscribe account
 	# connect to Windscribe
 	prefixWith "[WINDSCRIBE]" echo "Connecting to Windscribe"
 	if [[ -n "${WINDSCRIBE_LOCATION}" ]]; then
