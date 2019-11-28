@@ -32,7 +32,12 @@ prefixWith() {
 	NL='
 	'
 	case "${WINDSCRIBE_PASSWORD}"  in
-	  *"${NL}"*) prefixWith "[WINDSCRIBE]" echo "Windscribe password cannot contain new lines; ensure that the environment variable \$WINDSCRIBE_USERNAME is set properly"
+	  *"${NL}"*) prefixWith "[WINDSCRIBE]" echo "Windscribe password cannot contain new lines; ensure that the environment variable \$WINDSCRIBE_PASSWORD is set properly"
+				 exit 1;;
+	esac
+	# ensure no newlines present
+	case "${WINDSCRIBE_LOCATION}"  in
+	  *"${NL}"*) prefixWith "[WINDSCRIBE]" echo "Windscribe location cannot contain new lines; ensure that the environment variable \$WINDSCRIBE_LOCATION is set properly"
 				 exit 1;;
 	esac
 	# iptable support checks
