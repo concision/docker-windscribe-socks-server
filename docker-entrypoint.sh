@@ -61,13 +61,17 @@ prefixWith() {
 
 	### Create TUN device for Windscribe
 	# create TUN device
-	prefixWith "[TUN]" echo "Creating TUN device"
-	prefixWith "[TUN]" mkdir -p /dev/net
-	prefixWith "[TUN]" mknod /dev/net/tun c 10 200
-	prefixWith "[TUN]" chmod 600 /dev/net/tun
+	prefixWith "[OPENVPN]" echo "Creating OpenVPN TUN device"
+	prefixWith "[OPENVPN]" mkdir -p /dev/net
+	prefixWith "[OPENVPN]" mknod /dev/net/tun c 10 200
+	prefixWith "[OPENVPN]" chmod 600 /dev/net/tun
 
 
 	### Start Windscribe client
+	# define DNS nameservers
+	prefixWith "[RESOLV]" echo "Writing /etc/resolv.conf"
+	sed -e 's/\s\+/\n/g;s/\(^\|\n\)/\1nameserver /g' <<< "${DNS:-1.1.1.1}" > "/etc/resolv.conf"
+	prefixWith "[RESOLV]" cat /etc/resolv.conf
 	# start windscribe daemon
 	prefixWith "[WINDSCRIBE]" echo "Starting Windscribe client"
 	prefixWith "[WINDSCRIBE]" windscribe start
