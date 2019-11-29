@@ -1,4 +1,7 @@
 # Windscribe SOCKS5 Server in Docker
+[![version](https://img.shields.io/github/v/tag/concision/docker-windscribe-socks-server?color=blue&sort=semver)](https://github.com/concision/docker-windscribe-socks-server/releases)
+[![docker pulls](https://img.shields.io/docker/pulls/concisions/windscribe-socks-server)](https://hub.docker.com/repository/docker/concisions/windscribe-socks-server)
+[![license](https://img.shields.io/github/license/concision/docker-windscribe-socks-server)](https://github.com/concision/docker-windscribe-socks-server/blob/master/LICENSE)
 
 ## Motivations
 [Windscribe](https://windscribe.com/) is a yet another VPN service, offering varying tiers of plans and subscriptions (free, pro, "build a plan", etc). Typically, traffic is tunneled through their servers by installing [Windscribe software](https://windscribe.com/download) on host devices. However, [additional methods](https://windscribe.com/features/config-generators) are available for tunneling without their software, through other protocols such as OpenVPN, IKEv2, and SOCKS5. Unfortunately, these protocols are unavailable to accounts that are not specifically on the "Pro" plan (e.g. free and "build a plan").
@@ -35,7 +38,7 @@ This project is bundled into a Docker image, making [Docker](https://www.docker.
 
 ### Source
 A pre-built image is available for pulling from any of the following registries:
-- [Docker Hub](https://hub.docker.com/repository/docker/concisions/windscribe-socks-server)
+- [Docker Hub](https://hub.docker.com/r/concisions/windscribe-socks-server)
 - [GitHub Packages](https://github.com/concision/docker-windscribe-socks-server/packages)
 
 The only currently supported OS/arch is linux/amd64.
