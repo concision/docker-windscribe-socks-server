@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  windscribe:
+    image: "concisions/windscribe-socks-server:latest"
+    # restart if stopped (see https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy)
+    restart: always
+    # Windscribe utilizes iptables and requires additional permissions (see https://stackoverflow.com/a/44523905)
+    # However, there are security ramifications to this (see CAP_NET_ADMIN at http://man7.org/linux/man-pages/man7/capabilities.7.html)
+    cap_add:
+      - NET_ADMIN
+    # publicly expose SOCKS5 server
+    ports:
+      - 1080:1080
+    # mount temporary container storage (see https://docs.docker.com/storage/tmpfs/)
+    tmpfs:
+      - /etc/windscribe:exec
+      - /root/.ssh:mode=700
+    environment:
+      # set DNS servers; whitespace delimited (default: 1.1.1.1; see https://1.1.1.1/dns/)
+      DNS: "1.1.1.1"
+      # Windscribe configuration; variable may be modified here or be sourced from '.env' file
+      WINDSCRIBE_USERNAME: "${WINDSCRIBE_USERNAME:?A Windscribe account username must be specified}"
+      WINDSCRIBE_PASSWORD: "${WINDSCRIBE_PASSWORD:?A Windscribe account password must be specified}"
+      WINDSCRIBE_LOCATION: "${WINDSCRIBE_LOCATION}"
