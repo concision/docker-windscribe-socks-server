@@ -5,7 +5,7 @@ FROM ubuntu:latest
 EXPOSE 1080/tcp
 
 
-### Liniux Dependencies
+### Linux Dependencies
 # install Windscribe and OpenSSH server
 RUN \
     # obtain caches
@@ -24,6 +24,8 @@ RUN \
         dos2unix \
         # openssh to create a SOCKS server
         openssh-server \
+        # IP healthcheck
+        curl \
         && \
     # fix resolveconf dependency configuration (as per https://stackoverflow.com/a/51507868)
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
@@ -53,5 +55,5 @@ RUN dos2unix /docker-*.sh && \
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-HEALTHCHECK --interval=60s --timeout=30s --start-period=15s --retries=3 \
+HEALTHCHECK --interval=120s --timeout=30s --start-period=15s --retries=3 \
             CMD "/docker-healthcheck.sh"
