@@ -70,7 +70,7 @@ prefixWith() {
 	### Start Windscribe client
 	# define DNS nameservers
 	prefixWith "[RESOLV]" echo "Writing /etc/resolv.conf"
-	sed -e 's/\s\+/\n/g;s/\(^\|\n\)/\1nameserver /g' <<< "${DNS:-1.1.1.1}" > "/etc/resolv.conf"
+	sed -e 's/\s\+/\n/g;s/\(^\|\n\)/\1nameserver /g' <<< "${WINDSCRIBE_DNS:-1.1.1.1}" > "/etc/resolv.conf"
 	prefixWith "[RESOLV]" cat /etc/resolv.conf
 	# start windscribe daemon
 	prefixWith "[WINDSCRIBE]" echo "Starting Windscribe client"
