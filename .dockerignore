@@ -1,0 +1,7 @@
+### Dockerignore whitelist
+# Ignore everything
+*
+# Whitelist
+!config
+!docker-entrypoint.sh
+!docker-healthcheck.sh

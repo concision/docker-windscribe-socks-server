@@ -40,23 +40,12 @@ prefixWith() {
 	  *"${NL}"*) prefixWith "[WINDSCRIBE]" echo "Windscribe location cannot contain new lines; ensure that the environment variable \$WINDSCRIBE_LOCATION is set properly"
 				 exit 1;;
 	esac
+
 	# iptable support checks
 	iptables -vnL > /dev/null 2>&1 || {
 		prefixWith "[IPTABLES]" echo "Ensure cap_add is set to NET_ADMIN"
 		  exit 1
 	}
-
-
-	### Create SSH identity and start OpenSSH server
-	# manage SSH identity
-	prefixWith "[SSH]" echo "Creating SSH key"
-	# generate SSH key
-	prefixWith "[SSH]" ssh-keygen -N "" -f "/root/.ssh/id_rsa" <<< y
-	# allow self-connecting with SSH
-	prefixWith "[SSH]" cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
-	# start SSH server
-	prefixWith "[SSH]" echo "Starting OpenSSH server"
-	prefixWith "[SSH]" service ssh start
 
 
 	### Create TUN device for Windscribe
@@ -96,12 +85,7 @@ prefixWith() {
 	prefixWith "[WINDSCRIBE]" windscribe firewall on
 
 
-	### Binds SOCKS server using OpenSSH
-	while true; do
-		prefixWith "[SSH]" echo "Creating OpenSSH SOCKS server"
-		prefixWith "[SSH]" ssh -4 -oStrictHostKeyChecking=accept-new -D 0.0.0.0:1080 -N root@127.0.0.1
-		prefixWith "[SSH]" echo "SOCKS server died, restarting"
-		sleep 1
-	done
+	### Binds SOCKS server using Dante
+	prefixWith "[DANTE]" danted
 
 } 2>&1 1>&3 3>&- | { while read -r line; do echo "$(date '+%Y-%m-%d %H:%M:%S') ERR $line"; done } } 3>&1 1>&2 | { while read -r line; do echo "$(date '+%Y-%m-%d %H:%M:%S') OUT $line"; done }
