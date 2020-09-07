@@ -1,12 +1,12 @@
-### Image Configuration
+### Ubuntu 20
 FROM ubuntu:groovy-20200812
 
 ## Configure Image
 # expose SOCKS5 server port
 EXPOSE 1080/tcp
-# default command
+# default entrypoint command
 CMD ["/docker-entrypoint.sh"]
-# healthcheck
+# docker healthcheck
 HEALTHCHECK --interval=120s --timeout=30s --start-period=15s --retries=3 \
         CMD "/docker-healthcheck.sh"
 
@@ -48,11 +48,11 @@ RUN \
     # clear logs
     rm -rf /var/logs/*
 
-## Add Docker scripts and configuration
-## Scripts
+## Project Sources
+# copy scripts
 COPY docker/docker-entrypoint.sh docker/docker-healthcheck.sh /
-# sanitize scripts
+# ensure scripts are executable
 RUN chmod +x /docker-entrypoint.sh /docker-healthcheck.sh
 
-## Danted Configuration
+# copy Danted Configuration
 COPY docker/config/danted.conf /etc/danted.conf

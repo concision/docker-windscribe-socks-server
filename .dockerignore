@@ -1,7 +1,5 @@
-### Dockerignore whitelist
-# Ignore everything
+### Dockerignore whitelist ###
+# ignore all files by default
 *
-# Whitelist
-!docker/config
-!docker/docker-entrypoint.sh
-!docker/docker-healthcheck.sh
+# whitelist files in docker subfolder
+!docker/
