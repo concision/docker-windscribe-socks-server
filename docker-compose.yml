@@ -22,4 +22,5 @@ services:
       # Windscribe configuration; variable may be modified here or be sourced from '.env' file
       WINDSCRIBE_USERNAME: "${WINDSCRIBE_USERNAME:?A Windscribe account username must be specified}"
       WINDSCRIBE_PASSWORD: "${WINDSCRIBE_PASSWORD:?A Windscribe account password must be specified}"
+      # requests a specific location
       WINDSCRIBE_LOCATION: "${WINDSCRIBE_LOCATION}"
