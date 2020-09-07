@@ -11,7 +11,6 @@ docker run \
 	--cap-add=NET_ADMIN \
 	--publish 1080:1080 \
 	--tmpfs /etc/windscribe:exec \
-	--tmpfs /root/.ssh:mode=700 \
 	--env WINDSCRIBE_DNS \
 	--env WINDSCRIBE_USERNAME \
 	--env WINDSCRIBE_PASSWORD \
