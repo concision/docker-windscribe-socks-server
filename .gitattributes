@@ -1,0 +1,11 @@
+# automatically detect text files and use LF as line end-of-line
+* text=auto eol=lf
+
+# explicitly declare .sh files as text
+*.sh text
+# explicitly declare .conf files as text
+*.conf text
+
+# explicitly declare Dockerfile files as text
+Dockerfile text
+.dockerignore text
