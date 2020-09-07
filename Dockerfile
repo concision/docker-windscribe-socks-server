@@ -1,26 +1,14 @@
-### Sanitize Windows \r\n formatting for Unix scripts
-FROM alpine as sanitized
-
-## Dependencies
-RUN apk --no-cache add dos2unix
-
-## Scripts
-COPY docker-entrypoint.sh docker-healthcheck.sh /scripts/
-# sanitize scripts
-RUN dos2unix /scripts/*.sh && \
-    chmod +x /scripts/*.sh
-
-## Danted Configuration
-COPY config/danted.conf /etc/danted.conf
-# sanitize configuration
-RUN dos2unix /etc/danted.conf
-
-
 ### Image Configuration
-FROM ubuntu
+FROM ubuntu:groovy-20200812
 
-# expose SOCKS server port
+## Configure Image
+# expose SOCKS5 server port
 EXPOSE 1080/tcp
+# default command
+CMD ["/docker-entrypoint.sh"]
+# healthcheck
+HEALTHCHECK --interval=120s --timeout=30s --start-period=15s --retries=3 \
+        CMD "/docker-healthcheck.sh"
 
 ## Linux Dependencies
 # install Windscribe and Dante server
@@ -61,14 +49,10 @@ RUN \
     rm -rf /var/logs/*
 
 ## Add Docker scripts and configuration
-# add scripts
-COPY --from=sanitized /scripts /
-# add dante server configuration
-COPY --from=sanitized /etc/danted.conf /etc/danted.conf
+## Scripts
+COPY docker/docker-entrypoint.sh docker/docker-healthcheck.sh /
+# sanitize scripts
+RUN chmod +x /docker-entrypoint.sh /docker-healthcheck.sh
 
-## Configure Image
-# default command
-CMD ["/docker-entrypoint.sh"]
-# healthcheck
-HEALTHCHECK --interval=120s --timeout=30s --start-period=15s --retries=3 \
-            CMD "/docker-healthcheck.sh"
+## Danted Configuration
+COPY docker/config/danted.conf /etc/danted.conf
