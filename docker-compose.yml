@@ -23,3 +23,9 @@ services:
       WINDSCRIBE_PASSWORD: "${WINDSCRIBE_PASSWORD:?A Windscribe account password must be specified}"
       # requests a specific location
       WINDSCRIBE_LOCATION: "${WINDSCRIBE_LOCATION}"
+      # socks user 1 (if any SOCKS_USERNAME_XYZ is specified, authentication is enabled)
+      SOCKS_USERNAME_1: "${SOCKS_USERNAME:-}"
+      SOCKS_PASSWORD_1: "${SOCKS_PASSWORD:-}"
+      # socks user 2
+      SOCKS_USERNAME_2: ""
+      SOCKS_PASSWORD_2: ""
