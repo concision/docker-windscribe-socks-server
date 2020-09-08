@@ -49,10 +49,10 @@ There are a few useful advantages of using this containerized application:
 - Networking tools (e.g. [Proxifier](https://www.proxifier.com/)) can enable fine-grained control by handling per-process traffic tunneling, rather than system wide traffic tunneling.
  
 ### Limitations
-There are, however, limitations to this project's usefulness relating significantly to security:
-- The SOCKS5 server has no authentication - the SOCKS5 server should _only_ be used in a tightly controlled network. Exposing the SOCKS5 server publicly allows any individual to tunnel traffic that is ultimately linked to a specific Windscribe account.
-- [Windscribe-CLI](https://windscribe.com/guides/linux) requires iptables support, requiring the NET_ADMIN cap permission to execute inside of a Docker container. As a consequence, a compromised container may be able to leverage all the capabilities of CAP_NET_ADMIN, as defined in the [Linux manuals](http://man7.org/linux/man-pages/man7/capabilities.7.html). While it is unlikely the software involved would be compromised, there is a non-zero possibility that a compromised container may be able to manipulate the host's iptables for malicious purposes.
-- Connections from other machines are dropped due to how Windscribe configures the container's internal networking; however, connections from sibling containers are accepted.
+However, there limitations to this project's usefulness relating significantly to security:
+- Traffic to the SOCKS5 server is _not_ encrypted and may be interceptable by a third party; however, traffic forwarded to Windscribe is encrypted. 
+- Without authentication, the SOCKS5 server should _only_ be used in a tightly controlled network. Exposing the SOCKS5 server publicly allows any actor to tunnel traffic that is linked back to the specified Windscribe account. As of version `0.3.0`, proxy server authentication can be configured through environment variables.
+- [Windscribe-CLI](https://windscribe.com/guides/linux) requires `iptables` support, requiring the `NET_ADMIN` cap permission to execute inside of a Docker container. As a consequence, a compromised container may be able to leverage all the capabilities of `CAP_NET_ADMIN`, as defined in the [Linux manuals](http://man7.org/linux/man-pages/man7/capabilities.7.html). While it is unlikely the software involved would be compromised, there is a non-zero possibility that a compromised container may be able to manipulate the host's iptables for malicious purposes.
 
 
 ## Deployment
@@ -101,7 +101,7 @@ There are several environment variables that can be configured for this image:
   - `WINDSCRIBE_PASSWORD`: Windscribe account password.
   - `WINDSCRIBE_LOCATION` (optional): A preferred Windscribe location to automatically connect to.
 - **SOCKS5 Server**:
-  > Note: By default, there is no authentication enabled. Setting any of the environment variables `SOCKS_USERNAME` or `SOCKS_USERNAME_xyz` automatically enables authentication.
+  > Note: By default, there is no authentication enabled. Setting any of the environment variables `SOCKS_USERNAME` or `SOCKS_USERNAME_xyz` automatically enables authentication. Without authentication, the SOCKS5 server should _only_ be used in a tightly controlled network.
   - `SOCKS_USERNAME` (optional): Enables SOCKS5 authentication and creates a new user. Must be alphanumeric (with `_`s).
   - `SOCKS_PASSWORD` (optional): Enables SOCKS5 authentication and sets the password for the associated `$SOCKS_USERNAME` user.
   Additional users can be defined by namespacing (e.g. suffixing "_1") additional environment variables under pairs of `SOCKS_USERNAME` and `SOCKS_PASSWORD`:
