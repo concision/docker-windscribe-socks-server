@@ -16,4 +16,5 @@ docker run \
 	--env WINDSCRIBE_PASSWORD \
 	--env WINDSCRIBE_LOCATION \
 	--env-file .env \
+	--name windscribe \
 	"concisions/windscribe-socks-server:latest"
