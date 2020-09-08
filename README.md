@@ -1,52 +1,98 @@
-# Windscribe SOCKS5 Server in Docker
-[![version](https://img.shields.io/github/v/tag/concision/docker-windscribe-socks-server?color=blue&sort=semver)](https://github.com/concision/docker-windscribe-socks-server/releases)
-[![docker pulls](https://img.shields.io/docker/pulls/concisions/windscribe-socks-server)](https://hub.docker.com/repository/docker/concisions/windscribe-socks-server)
-[![license](https://img.shields.io/github/license/concision/docker-windscribe-socks-server)](https://github.com/concision/docker-windscribe-socks-server/blob/master/LICENSE)
+<h1 align="center">
+    Dockerized Windscribe SOCKS5 Server
+</h1>
+
+<p align="center">
+    <a href="https://github.com/concision/docker-windscribe-socks-server/blob/master/LICENSE">
+        <img alt="repository license" src="https://img.shields.io/github/license/concision/docker-windscribe-socks-server?style=for-the-badge"/>
+    </a>
+    <a href="https://github.com/concision/docker-windscribe-socks-server/releasess">
+        <img alt="release version" src="https://img.shields.io/github/v/tag/concision/docker-windscribe-socks-server?style=for-the-badge&logo=git"/>
+    </a>
+    <a href="https://hub.docker.com/repository/docker/concisions/windscribe-socks-server">
+        <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/concisions/windscribe-socks-server?style=for-the-badge&logo=docker"/>
+    </a>
+</p>
+
+<p align="center">
+    <i>Containerizes a SOCKS5 proxy server with traffic tunneled through Windscribe's VPN service</i>
+</p>
+
+## Table of Contents
+- [Motivations](#motivations)
+- [Pro Et Contra](#pro-et-contra)
+  - [Advantages](#advantages)
+  - [Limitations](#limitations)
+- [Deployment](#deployment)
+  - [Image Source](#image-source)
+  - [Deploying Container](#deploying-container)
+    - [Docker Compose](#docker-compose)
+    - [Docker CLI](#docker-cli)
+  - [Configuration](#configuration)
+
 
 ## Motivations
-[Windscribe](https://windscribe.com/) is a yet another VPN service, offering varying tiers of plans and subscriptions (free, pro, "build a plan", etc). Typically, traffic is tunneled through their servers by installing [Windscribe software](https://windscribe.com/download) on host devices. However, [additional methods](https://windscribe.com/features/config-generators) are available for tunneling without their software, through other protocols such as OpenVPN, IKEv2, and SOCKS5. Unfortunately, these protocols are unavailable to accounts that are not specifically on the "Pro" plan (e.g. free and "build a plan").
+[Windscribe](https://windscribe.com/) is a yet another VPN service, offering varying subscriptions plans (free, pro, "build a plan", etc). Typically, [Windscribe software](https://windscribe.com/download) must be installed on host devices to tunnel traffic through their VPN servers. However, there are [other protocols](https://windscribe.com/features/config-generators) (e.g. OpenVPN, IKEv2, SOCKS5, etc) supported for tunneling *without* their proprietary software. Unfortunately, these protocols are only available to users on their "Pro" subscription plan (i.e. excluding free and "Build A Plan" subscription plans).
 
-I had requested SOCKS5 support for the "Build A Plan" option from their support, but have received a generic response indicating that there was no particular interest in adding such support for any plans other than "Pro". As a result, Windscribe software must be utilized to tunnel traffic on a host device, presenting two corollaries:
-- a host device must be able to install and run the Windscribe VPN software
-- _all_ traffic is tunneled through Windscribe servers
+I had submitted a feature request for SOCKS5 support for the "Build A Plan" option from their support, but have received a generic response indicating there was no particular interest in adding such support for non-"Pro" subscription plans. Ergo, Windscribe software must be installed on a host device to tunnel traffic, presenting two corollaries:
+- a host device must be eligible for installing and running Windscribe VPN software
+- _all_ system traffic will be tunneled through Windscribe servers
 
-This project addresses fringe use-cases and serves to avoid the aforementioned corollaries by containerizing Windscribe software in [Docker](https://www.docker.com/) and exposing a tunnel as a SOCKS5 proxy server.
+This project was created to address a fringe use-case and circumvent the aforementioned corollaries by containerizing Windscribe software within [Docker](https://www.docker.com/), enabling tunneling through as a SOCKS5 proxy server.
 
 
 ## Pro Et Contra
-### Benefits
-There are a few benefits of using this project's containerized application:
-- No premium subscription is necessary to use the SOCKS5 protocol to tunnel traffic through Windscribe.
-- A host device incompatible with Windscribe software can still leverage tunneling through their VPN.
-- Traffic on a host device may be finely controlled to only tunnel specific traffic through Windscribe.
-    - Not all traffic may need to be tunneled, and tunneled traffic may incur a significant bandwidth and latency performance hit.
-    - Tools such as [Proxifier](https://www.proxifier.com/) may be utilized to handle per-process traffic tunneling.
-    - Some internet services have blacklisted commonly used Windscribe IP ranges, previously presenting an issue accessing specific services when the VPN was connected. 
-- Containerization allows tunneling traffic through Windscribe in Docker stacks.
+### Advantages
+There are a few useful advantages of using this containerized application:
+- Paid subscriptions are not required to use the SOCKS5 protocol to tunnel traffic through Windscribe.
+- A host device does not need to install Windscribe system software and can still tunnel traffic through their VPN servers.
+- Networking tools (e.g. [Proxifier](https://www.proxifier.com/)) can enable fine-grained control by handling per-process traffic tunneling, rather than system wide traffic tunneling.
  
 ### Limitations
 There are, however, limitations to this project's usefulness relating significantly to security:
-- The SOCKS5 server has no authentication - the SOCKS5 server should _only_ be used in a tightly controlled network.
-    - Exposing the SOCKS5 server publicly allows any individual to tunnel traffic that is ultimately linked to a specific Windscribe account.
-    > Note: This concern can be addressed by swapping the underlying implementation of the SOCKS5 to an proxy server that supports authentication (e.g. [dante](https://www.inet.no/dante/)).
-- [Windscribe-CLI](https://windscribe.com/guides/linux) requires iptables support, requiring the NET_ADMIN cap permission to execute inside of a Docker container. As a corollary, a compromised container may be able to leverage all the capabilities of CAP_NET_ADMIN, as defined in the [Linux manuals](http://man7.org/linux/man-pages/man7/capabilities.7.html).
-    - While it is unlikely the software involved would be compromised, there is a non-zero possibility that a compromised container may be able to manipulate the host's iptables for malicious reasons.
+- The SOCKS5 server has no authentication - the SOCKS5 server should _only_ be used in a tightly controlled network. Exposing the SOCKS5 server publicly allows any individual to tunnel traffic that is ultimately linked to a specific Windscribe account.
+- [Windscribe-CLI](https://windscribe.com/guides/linux) requires iptables support, requiring the NET_ADMIN cap permission to execute inside of a Docker container. As a consequence, a compromised container may be able to leverage all the capabilities of CAP_NET_ADMIN, as defined in the [Linux manuals](http://man7.org/linux/man-pages/man7/capabilities.7.html). While it is unlikely the software involved would be compromised, there is a non-zero possibility that a compromised container may be able to manipulate the host's iptables for malicious purposes.
+- Connections from other machines are dropped due to how Windscribe configures the container's internal networking; however, connections from sibling containers are accepted.
 
 
 ## Deployment
-This project is bundled into a Docker image, making [Docker](https://www.docker.com/) a prerequisite for running this project.
+This project must be built using a container image building tool and run using container runtime (e.g. Docker, Podman, etc). [Docker](https://www.docker.com/) instructions are included in the following sections.
 
-### Source
-A pre-built image is available for pulling from any of the following registries:
-- [Docker Hub](https://hub.docker.com/r/concisions/windscribe-socks-server)
-- [GitHub Packages](https://github.com/concision/docker-windscribe-socks-server/packages)
+### Image Source
+Pre-built images can be pulled from any of the following registries:
+- [Docker Hub](https://hub.docker.com/r/concisions/windscribe-socks-server): `concisions/windscribe-socks-server:latest`
+- [GitHub Packages](https://github.com/concision/docker-windscribe-socks-server/packages): `docker.pkg.github.com/concision/docker-windscribe-socks-server/windscribe-socks-server:latest`
+> Note: The only prebuilt images architectures available are `linux/amd64` and `linux/arm/v7`. At the time of writing this documentation, Windscribe distributions are not available for other architectures.
 
-The only currently supported OS/arch is linux/amd64.
-
-Alternatively, the project can be built from the Dockerfile for new architectures by executing the following command in the project root directory:
+Alternatively, the project can be built from the repository's sources by cloning the repository and running a container image build tool.
 ```bash
+# clone the repository
+git clone https://github.com/concision/docker-windscribe-socks-server.git
+# change current working directory
+cd docker-windscribe-socks-server
+# build Docker image
 docker build -t concisions/windscribe-socks-server:latest .
 ```
+> Note: Ensure the current working directory is inside of the cloned Git repository prior to executing the command (e.g. `cd docker-windscribe-socks-server`).
+
+### Deploying Container
+#### Docker Compose
+To deploy with [Docker Compose](https://docs.docker.com/compose/), use the commented configuration file available in this repository [here](https://github.com/concision/docker-windscribe-socks-server/blob/master/docker-compose.yml). Environment variables may be sourced with an `.env` file or explicitly defined in the configuration file.
+
+The container can be deployed with the following command:
+```bash
+docker-compose up
+```
+
+#### Docker CLI
+To deploy with [Docker](https://www.docker.com/), use the example run script available in this repository [here](https://github.com/concision/docker-windscribe-socks-server/blob/master/deploy-container.sh). It can be configured in the script itself or use an `.env` file.
+
+The container can be deployed with the following command:
+```bash
+./deploy-container.sh
+```
+> Note: Running the container interactively may break Windscribe authentication
+
 
 ### Configuration
 There are several environment variables that can be configured for this image:
@@ -55,19 +101,5 @@ There are several environment variables that can be configured for this image:
 - `WINDSCRIBE_PASSWORD`: Windscribe account password.
 - `WINDSCRIBE_LOCATION` (optional): A preferred Windscribe location to automatically connect to.
 
-### Docker Compose
-To deploy with Docker compose, a commented configuration file is available in this repository [here](https://github.com/concision/docker-windscribe-socks-server/blob/master/docker-compose.yml). Environment variables may be sourced with an `.env` file or explicitly defined in the configuration file.
-
-To deploy it, the following command can be executed:
-```bash
-docker-compose up
-```
-
-### Docker CLI
-To deploy with only Docker, an example run script is available in this repository [here](https://github.com/concision/docker-windscribe-socks-server/blob/master/deploy-container.sh). It can be configured in the script itself or use an `.env` file.
-
-To deploy it, the following command can be executed:
-```bash
-./deploy-container.sh
-```
-> Note: Running the container interactively may break Windscribe authentication
+## Disclaimer
+This project is a prototype and has its own set of issues and drawbacks compared to running Windscribe system software. Your mileage may vary.
