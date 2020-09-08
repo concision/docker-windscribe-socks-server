@@ -6,7 +6,7 @@
     <a href="https://github.com/concision/docker-windscribe-socks-server/blob/master/LICENSE">
         <img alt="repository license" src="https://img.shields.io/github/license/concision/docker-windscribe-socks-server?style=for-the-badge"/>
     </a>
-    <a href="https://github.com/concision/docker-windscribe-socks-server/releasess">
+    <a href="https://github.com/concision/docker-windscribe-socks-server/releases">
         <img alt="release version" src="https://img.shields.io/github/v/tag/concision/docker-windscribe-socks-server?style=for-the-badge&logo=git"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/concisions/windscribe-socks-server">
