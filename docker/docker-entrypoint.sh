@@ -90,6 +90,18 @@ prefixWith() {
     prefixWith "[WINDSCRIBE]" windscribe firewall on
 
 
+    ### Fix eth0 networking
+    # get eth0 interface IP (see https://unix.stackexchange.com/a/8521)
+    INTERFACE_IP=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+    # get eth0 default gateway (see https://stackoverflow.com/a/1226395)
+    GATEWAY_IP=$(ip route | awk '/default/ { print $3 }')
+
+    # reply to packets on same interface as received (see https://unix.stackexchange.com/a/23345)
+    echo 200 isp2 >> /etc/iproute2/rt_tables
+    ip rule add from "${INTERFACE_IP}" table isp2
+    ip route add default via "${GATEWAY_IP}" table isp2
+
+
     ### Binds SOCKS server using Dante
     prefixWith "[DANTE]" echo "Starting Danted server"
     prefixWith "[DANTE]" danted
