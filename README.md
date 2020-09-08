@@ -9,7 +9,7 @@
     <a href="https://github.com/concision/docker-windscribe-socks-server/releases">
         <img alt="release version" src="https://img.shields.io/github/v/tag/concision/docker-windscribe-socks-server?style=for-the-badge&logo=git"/>
     </a>
-    <a href="https://hub.docker.com/repository/docker/concisions/windscribe-socks-server">
+    <a href="https://hub.docker.com/r/concisions/windscribe-socks-server">
         <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/concisions/windscribe-socks-server?style=for-the-badge&logo=docker"/>
     </a>
 </p>
