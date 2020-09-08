@@ -42,11 +42,15 @@ RUN \
     apt-get install -y windscribe-cli && \
     # remove Windscribe repository key
     apt-key del FDC247B7 && \
+    # remove packages
+    apt-get purge -y gnupg2 apt-utils debconf-utils apt-utils debconf-utils dialog && apt-get autoremove -y && \
+    # remove Windscribe repository file
+    rm -rf /etc/apt/sources.list.d/windscribe-repo.list && \
     # cleanup apt-get lists
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     # clear logs
-    rm -rf /var/logs/*
+    rm -rf /var/log/*
 
 ## Project Sources
 # copy scripts
