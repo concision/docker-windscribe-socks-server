@@ -14,6 +14,12 @@ prefixWith() {
 
 ### Execute script with timestamp logging
 { {
+    ### Check if shell is interactive
+    if [ -t 0 ] ; then
+        echo "Container cannot be run interactively" 1>&2
+        exit 1
+    fi
+
     ### Sanity Checks
     # username checks
     if [[ -z "${WINDSCRIBE_USERNAME}" ]]; then
