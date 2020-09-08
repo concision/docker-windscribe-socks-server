@@ -1,5 +1,5 @@
-### Ubuntu 20
-FROM ubuntu:groovy-20200812
+### Ubuntu 19
+FROM ubuntu:focal-20200729
 
 ## Configure Image
 # expose SOCKS5 server port
@@ -35,7 +35,7 @@ RUN \
     # add Windscribe signing key
     apt-key adv --keyserver keyserver.ubuntu.com --recv-key FDC247B7 && \
     # add Windscribe repository
-    echo 'deb https://repo.windscribe.com/ubuntu zesty main' | tee /etc/apt/sources.list.d/windscribe-repo.list && \
+    echo 'deb https://repo.windscribe.com/ubuntu bionic main' | tee /etc/apt/sources.list.d/windscribe-repo.list && \
     # update repository
     apt-get update && \
     # install Windscribe
