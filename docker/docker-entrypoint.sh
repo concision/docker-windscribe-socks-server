@@ -87,8 +87,8 @@ prefixWith() {
 
         # ensure no duplicate account names
         if id "${username}" &>/dev/null; then
-            prefixWith "[SOCKS5]" echo "The requested username (from \$SOCKS_USERNAME${suffix}) is either reserved or already allocated: ${username}" 1>&2
-            exit 1
+            prefixWith "[SOCKS5]" echo "The requested username (from \$SOCKS_USERNAME${suffix}) is either reserved or already allocated, ignoring; username: ${username}" 1>&2
+            continue
         fi
 
         # create user account
