@@ -1,5 +1,8 @@
 ### Ubuntu 19
 FROM ubuntu:focal-20200729
+## Metadata
+# maintainer tag
+LABEL maintainer="contact@concision.me"
 
 ## Configure Image
 # expose SOCKS5 server port
