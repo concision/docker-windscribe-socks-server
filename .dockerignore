@@ -2,4 +2,4 @@
 # ignore all files by default
 *
 # whitelist files in docker subfolder
-!docker/
+!src/

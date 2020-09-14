@@ -57,9 +57,9 @@ RUN \
 
 ## Project Sources
 # copy scripts
-COPY docker/docker-entrypoint.sh docker/docker-healthcheck.sh /
+COPY src/docker-entrypoint.sh src/docker-healthcheck.sh /
 # ensure scripts are executable
 RUN chmod +x /docker-entrypoint.sh /docker-healthcheck.sh
 
 # copy Danted Configuration
-COPY docker/config/danted.conf /etc/danted.conf
+COPY src/config/danted.conf /etc/danted.conf
