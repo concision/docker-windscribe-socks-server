@@ -29,7 +29,7 @@
     - [Docker Compose](#docker-compose)
     - [Docker CLI](#docker-cli)
   - [Configuration](#configuration)
-
+- [Disclaimer](#disclaimer)
 
 ## Motivations
 [Windscribe](https://windscribe.com/) is a yet another VPN service, offering varying subscriptions plans (free, pro, "build a plan", etc). Typically, [Windscribe software](https://windscribe.com/download) must be installed on host devices to tunnel traffic through their VPN servers. However, there are [other protocols](https://windscribe.com/features/config-generators) (e.g. OpenVPN, IKEv2, SOCKS5, etc) supported for tunneling *without* their proprietary software. Unfortunately, these protocols are only available to users on their "Pro" subscription plan (i.e. excluding free and "Build A Plan" subscription plans).
@@ -109,4 +109,4 @@ There are several environment variables that can be configured for this image:
   - `SOCKS_PASSWORD_xyz` (optional): Enables SOCKS5 authentication and sets the password for the associated `SOCKS_USERNAME_xyz` user.
 
 ## Disclaimer
-This project is a prototype and has its own set of issues and drawbacks compared to running Windscribe system software. Your mileage may vary.
+This project is a prototype that has been hacked together and has its own set of issues and drawbacks compared to running Windscribe system software. Your mileage may vary. If you are experiencing an issue you believe is not intended, a GitHub issue can be filed [here](https://github.com/concision/docker-windscribe-socks-server/issues/new); however, not all issues may be solvable due to the hacky and unpredictable nature of this project and its software dependencies.
