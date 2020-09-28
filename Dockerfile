@@ -1,5 +1,8 @@
-### Ubuntu 19
-FROM ubuntu:focal-20200729
+### Ubuntu 18
+# Using ubuntu 18, as there appears to be compatiblity issues with later ubuntu versions on linux/arm/v7.
+# See https://bugs.launchpad.net/cloud-images/+bug/1896443
+FROM ubuntu:bionic-20200921
+
 ## Metadata
 # maintainer tag
 LABEL maintainer="contact@concision.me"
