@@ -1,5 +1,8 @@
 ### Dockerignore whitelist ###
+
 # ignore all files by default
 *
-# whitelist files in docker subfolder
+
+# whitelist sources
 !src/
+!lib/dotenv/dotenv
