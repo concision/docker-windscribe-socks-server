@@ -15,6 +15,7 @@ services:
     # mount temporary container storage (see https://docs.docker.com/storage/tmpfs/)
     tmpfs:
       - /etc/windscribe:exec
+    # specify configuration through environment variables
     environment:
       # set DNS servers; whitespace delimited (default: 1.1.1.1; see https://1.1.1.1/dns/)
       WINDSCRIBE_DNS: "${WINDSCRIBE_DNS:-1.1.1.1}"
@@ -29,3 +30,9 @@ services:
       # socks user 2
       SOCKS_USERNAME_2: ""
       SOCKS_PASSWORD_2: ""
+    # or comment out the above section and specify configuration through a secrets file in .env format
+#    secrets:
+#      - windscribe_server
+#secrets:
+#  windscribe_server:
+#    file: secrets.env
