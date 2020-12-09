@@ -84,6 +84,8 @@ The container can be deployed with the following command:
 docker-compose up
 ```
 
+> Note: An `.env` file containing all environment variable configuration can be passed as a [Docker secret](https://docs.docker.com/engine/swarm/secrets/#use-secrets-in-compose) file using the key `windscribe_server`. Uncomment the relevant section in the [`docker-compose.yml`](https://github.com/concision/docker-windscribe-socks-server/blob/master/docker-compose.yml) file template. Configured Docker secrets take precedence over environment variables.
+
 #### Docker CLI
 To deploy with [Docker](https://www.docker.com/), use the example run script available in this repository [here](https://github.com/concision/docker-windscribe-socks-server/blob/master/deploy-container.sh). It can be configured in the script itself or use an `.env` file.
 
@@ -91,10 +93,10 @@ The container can be deployed with the following command:
 ```bash
 ./deploy-container.sh
 ```
-> Note: If specifying multiple SOCKS5 users, specify the relevant environment variables in an `.env` file or ads a `--env SOCKS_USERNAME_xyz` and `--env SOCKS_PASSWORD_xyz` flag (where "xyz" is a wildcard) to the script.
+> Note: If specifying multiple SOCKS5 users, specify the relevant environment variables in an `.env` file or add `--env SOCKS_USERNAME_xyz` and `--env SOCKS_PASSWORD_xyz` flag (where "xyz" is a wildcard) to the script.
 
 ### Configuration
-There are several environment variables that can be configured for this image:
+There are several variables that can be configured for this image:
 - **Windscribe**:
   - `WINDSCRIBE_DNS` (optional): Whitespace delimited list of DNS servers to use (default: `1.1.1.1`). Setting a DNS server with Docker flags is not sufficient enough, as it utilizes an embedded local DNS server. Windscribe tunnels all DNS requests to prevent DNS leakage.
   - `WINDSCRIBE_USERNAME`: Windscribe account username.
