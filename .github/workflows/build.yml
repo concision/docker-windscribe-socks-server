@@ -1,12 +1,6 @@
 name: "Continuous Integration"
 
 on:
-  push:
-    branches:
-      - '*'
-    tags-ignore:
-      - 'v*'
-      - 'latest'
   pull_request:
 
 jobs:
