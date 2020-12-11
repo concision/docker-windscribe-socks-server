@@ -5,10 +5,10 @@ on:
 
 jobs:
   build:
-    name: "Build"
+    name: "Build Image"
     runs-on: ubuntu-18.04
     steps:
-      - name: "Checkout Repository"
+      - name: "Checkout Git Repository"
         uses: actions/checkout@v2
         with:
           # clone Git submodules
@@ -20,7 +20,7 @@ jobs:
       - name: "Docker: Set up Buildx"
         uses: docker/setup-buildx-action@v1
 
-      - name: Cache Docker layers
+      - name: "Cache: Docker layers"
         uses: actions/cache@v2
         with:
           path: "/tmp/.buildx-cache"
