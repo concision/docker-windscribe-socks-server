@@ -1,4 +1,5 @@
-### Alpine Builder Image
+### Ubuntu 18
+# Same version as built image to minimize pulls
 FROM ubuntu:bionic-20200921 AS sources
 
 ## Linux Depenedencies
