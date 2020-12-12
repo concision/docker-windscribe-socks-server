@@ -21,7 +21,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: |
-            ghcr.io/concision/windscribe-socks-server
+            ghcr.io/concision/docker-windscribe-socks-server
             concisions/windscribe-socks-server
           tag-semver: |
             {{version}}
@@ -54,8 +54,8 @@ jobs:
           platforms: linux/386,linux/amd64,linux/arm/v7
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
-          cache-from: type=registry,ref=ghcr.io/concision/windscribe-socks-server:cache
-          cache-to: type=registry,ref=ghcr.io/concision/windscribe-socks-server:cache
+          cache-from: type=registry,ref=ghcr.io/concision/docker:cache
+          cache-to: type=registry,ref=ghcr.io/concision/docker:cache
 
       - name: "DockerHub: Update README"
         uses: peter-evans/dockerhub-description@v2
