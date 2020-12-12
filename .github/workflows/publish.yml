@@ -21,7 +21,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: |
-            ghcr.io/concision/docker-windscribe-socks-server
+            ghcr.io/concision/docker-windscribe-socks-server/windscribe-socks-server
             concisions/windscribe-socks-server
           tag-semver: |
             {{version}}
