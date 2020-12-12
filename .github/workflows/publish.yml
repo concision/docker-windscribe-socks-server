@@ -1,0 +1,66 @@
+name: "Continuous Delivery"
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: "Build & Push Image"
+    runs-on: ubuntu-18.04
+    steps:
+      - name: "Checkout Git Repository"
+        uses: actions/checkout@v2
+        with:
+          # clone Git submodules
+          submodules: true
+
+      - name: "Docker: Generate Tags"
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: |
+            concisions/windscribe-socks-server
+            ghcr.io/concisions/windscribe-socks-server
+          tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
+
+      - name: "Docker: Set up QEMU"
+        uses: docker/setup-qemu-action@v1
+
+      - name: "Docker: Set up Buildx"
+        uses: docker/setup-buildx-action@v1
+
+      - name: "DockerHub: Login"
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: "GitHub Container Registry: Login"
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: "Docker: Build and Push"
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/386,linux/amd64,linux/arm/v7
+          push: true
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          cache-from: type=registry,ref=ghcr.io/concisions/windscribe-socks-server:cache
+          cache-to: type=registry,ref=ghcr.io/concisions/windscribe-socks-server:cache
+
+      - name: "DockerHub: Update README"
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: concisions/windscribe-socks-server
+          readme-filepath: ./README.md
